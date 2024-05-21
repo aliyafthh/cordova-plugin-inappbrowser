@@ -536,7 +536,11 @@ public class InAppBrowser extends CordovaPlugin {
                     // NB: wait for about:blank before dismissing
                     public void onPageFinished(WebView view, String url) {
                         if (dialog != null && !cordova.getActivity().isFinishing()) {
-                            dialog.dismiss();
+                            try {
+                                dialog.dismiss();
+                            } catch(IllegalArgumentException e) {
+                                LOG.e(LOG_TAG, "Caught exception when trying to close IAB dialog: " + e);
+                            }
                             dialog = null;
                         }
                     }
@@ -783,7 +787,11 @@ public class InAppBrowser extends CordovaPlugin {
 
                 // CB-6702 InAppBrowser hangs when opening more than one instance
                 if (dialog != null) {
-                    dialog.dismiss();
+                    try {
+                        dialog.dismiss();
+                    } catch(IllegalArgumentException e) {
+                        LOG.e(LOG_TAG, "Caught exception when trying to close IAB dialog: " + e);
+                    }
                 };
 
                 // Let's create the main dialog
